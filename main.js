@@ -39,7 +39,7 @@ menu.on('ready', function ready () {
 
   setInterval(function() {
     post_stats()
-  }, 5000)
+  }, 60 * 1000)
 })
 
 // Functions
