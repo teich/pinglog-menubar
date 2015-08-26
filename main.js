@@ -42,13 +42,13 @@ function post_stats() {
       host:    get_uuid()
     }
   }
-  
+
   request.post({
     url: 'https://enigmatic-ocean-6979.herokuapp.com/api/logs',
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    // headers: {
+    //   'Content-Type': 'application/json'
+    // },
     json: formData
   }, function (error, response, body) {
     if (error) {
