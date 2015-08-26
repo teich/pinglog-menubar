@@ -1,3 +1,8 @@
+
+var SOMECONST = {
+  id: 'foo'
+}
+
 var menubar       = require('menubar')
 var child_process = require('child_process')
 var request       = require('request')
@@ -10,6 +15,9 @@ var app = new Server()
 var opts
 var menu = menubar(opts)
 
+var statsStore = []
+var statsSize = 5
+
 process.on('uncaughtException', function (err) {
   dialog.showErrorBox('Uncaught Exception: ' + err.message, err.stack || '')
   menu.app.quit()
@@ -20,7 +28,8 @@ menu.on('ready', function ready () {
 
   menu.on('show', function show () {
     app.configure(menu.window.webContents)
-    app.send('show')
+    // app.send('update', JSON.stringify(statsStore))
+    app.send('show', JSON.stringify(statsStore))
   })
 
   app.on('terminate',  function terminate (ev) {
@@ -30,7 +39,7 @@ menu.on('ready', function ready () {
 
   setInterval(function() {
     post_stats()
-  }, 60000)
+  }, 5000)
 })
 
 // Functions
@@ -63,6 +72,13 @@ function get_uuid() {
 
 }
 
+function save_stats(data) {
+  statsStore.push(data)
+  if (statsStore.length > statsSize) {
+    statsStore.shift()
+  }
+}
+
 function post_stats() {
   var formData = {
     log: {
@@ -72,6 +88,7 @@ function post_stats() {
       host:    get_uuid()
     }
   }
+  save_stats(formData.log)
 
   request.post({
     url: 'https://enigmatic-ocean-6979.herokuapp.com/api/logs',
@@ -81,7 +98,7 @@ function post_stats() {
     if (error) {
       console.log(error)
     } else {
-      console.log (response.statusCode, formData.log.network);
+      // console.log (response.statusCode, formData.log.network);
     }
   })
 }

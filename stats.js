@@ -19,23 +19,6 @@ var templates = {
 var state = {}
 
 var events = {
-  processAction: function (e) {
-    var action = e.node.attributes['data-action'].value
-    var procNameAttr = e.node.attributes['data-name']
-    var data = {task: action}
-    if (procNameAttr) data.name = procNameAttr.value
-    client.request('task', data, function (err, data) {
-      if (err) return throwError(err)
-      if (!data) return
-
-      if (Array.isArray(data)) {
-        renderAll(data)
-      } else if (data.name) {
-        state.detail.set(data)
-      }
-    })
-  },
-
   quit: function () {
     client.request('terminate')
   }
@@ -56,11 +39,10 @@ page.start()
 page('/')
 
 // Load all statuses when the app gets focused
-// client.on('show', function () {
-//   getAndRenderAll()
-//   var currentProcess = state.detail && state.detail.get('name')
-//   if (currentProcess) getAndRender(currentProcess)
-// })
+client.on('show', function (event, data) {
+    var pings = JSON.parse(data)
+    state.stats.set({data: pings})
+})
 
 function render (ctx) {
   var ract = new Ractive({

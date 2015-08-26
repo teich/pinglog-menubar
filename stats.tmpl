@@ -1,3 +1,13 @@
+<ul class="table-view">
+  <li class="table-view-cell table-view-divider">Ping Times</li>
+  {{#data}}
+    <li class="table-view-cell">
+      <span class="pull-left">Google: {{google}}</span>
+      <span class="pull-right">Gateway: {{gateway}}</span>
+    </li>
+  {{/data}}
+</ul>
+
 <div class="bar bar-standard bar-footer">
   <button class="btn pull-right" on-click="quit">
     Quit
