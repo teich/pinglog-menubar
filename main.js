@@ -1,9 +1,39 @@
-var menubar       = require('menubar');
-var child_process = require('child_process');
-var request       = require('request');
+var menubar       = require('menubar')
+var child_process = require('child_process')
+var request       = require('request')
+var dialog        = require('dialog')
+var Server        = require('electron-rpc/server')
 
-var mb = menubar()
+var app = new Server()
 
+// var opts = {dir: __dirname, icon: path.join(__dirname, 'images', 'Icon.png')}
+var opts
+var menu = menubar(opts)
+
+process.on('uncaughtException', function (err) {
+  dialog.showErrorBox('Uncaught Exception: ' + err.message, err.stack || '')
+  menu.app.quit()
+})
+
+menu.on('ready', function ready () {
+  var canQuit = false
+
+  menu.on('show', function show () {
+    app.configure(menu.window.webContents)
+    app.send('show')
+  })
+
+  app.on('terminate',  function terminate (ev) {
+    canQuit = true
+    menu.app.terminate()
+  })
+
+  setInterval(function() {
+    post_stats()
+  }, 60000)
+})
+
+// Functions
 
 function ping(host) {
   var ping_cmd = "ping -c 1 " + host + " | grep 'time=' | awk '{print $7}' | cut -f 2 -d '='"
@@ -46,9 +76,6 @@ function post_stats() {
   request.post({
     url: 'https://enigmatic-ocean-6979.herokuapp.com/api/logs',
     method: 'POST',
-    // headers: {
-    //   'Content-Type': 'application/json'
-    // },
     json: formData
   }, function (error, response, body) {
     if (error) {
@@ -58,9 +85,3 @@ function post_stats() {
     }
   })
 }
-
-mb.on('ready', function ready () {
-  setInterval(function() {
-    post_stats();
-  }, 60000);
-})

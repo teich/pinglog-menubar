@@ -3,7 +3,10 @@
   "version": "0.0.2",
   "description": "Menubar app for ping logging",
   "dependencies": {
+    "electron-rpc": "^1.0.3",
     "menubar": "*",
+    "page": "^1.6.3",
+    "ractive": "^0.7.3",
     "request": "^2.61.0"
   },
   "devDependencies": {
