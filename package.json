@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/teich/pinglog-menubar.git"
   },
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "author": "Oren Teich",
   "dependencies": {
     "electron-rpc": "^1.0.3",
