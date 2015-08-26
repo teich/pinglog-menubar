@@ -1,8 +1,3 @@
-
-var SOMECONST = {
-  id: 'foo'
-}
-
 var menubar       = require('menubar')
 var child_process = require('child_process')
 var request       = require('request')
