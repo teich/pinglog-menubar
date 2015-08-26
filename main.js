@@ -80,8 +80,8 @@ function post_stats() {
   }, function (error, response, body) {
     if (error) {
       console.log(error)
-    // } else {
-    //   console.log (response.statusCode, body);
+    } else {
+      console.log (response.statusCode, formData.log.network);
     }
   })
 }
